@@ -44,8 +44,8 @@ void setup() {
   }
   
   Queue<Point> temp = SIL(0, NUM_BUILDINGS-1, 0);
+  depthPrint(0, "solution has size: " + temp.size());
   while (temp.size() > 0){
-    System.out.println("draw");
     drawCritPoint(temp.element().x, temp.element().y);
     temp.remove();
   }
@@ -66,7 +66,6 @@ Queue<Point> SIL(int start, int end, int depth){
   Queue<Point> ans_queue = new LinkedList<Point>();
   if (start == end){
      ans_queue.add(new Point(Arr[start].left_x, Arr[start].h));
-     drawCritPoint(Arr[start].left_x, Arr[start].h));
      ans_queue.add(new Point(Arr[start].right_x, 0));
      return ans_queue;
   }
@@ -74,29 +73,24 @@ Queue<Point> SIL(int start, int end, int depth){
   Queue<Point> sil1_q = SIL(start, m, ++depth);
   Queue<Point> sil2_q = SIL(m+1, end, ++depth);
  
-  depthPrint(depth, sil1_q.size() + " " + sil2_q.size());
   int height1 = 0, height2 = 0, cur_height = 0;
   
   while (sil1_q.size() > 0 && sil2_q.size() > 0){
-     depthPrint(depth, "in while");
      int cur_x = 0;
      if (sil1_q.element().x < sil2_q.element().x){
         height1 = sil1_q.element().y;
         cur_x = sil1_q.element().x;
         sil1_q.remove();
-        depthPrint(depth, "added element from sil1");
      } else if (sil1_q.element().x > sil2_q.element().x){
         height2 = sil2_q.element().y;
         cur_x = sil2_q.element().x;
         sil2_q.remove();
-        depthPrint(depth, "added element from sil2");        
      } else {
         height1 = sil1_q.element().y;
         height2 = sil2_q.element().y;
         cur_x = sil1_q.element().x;
         sil1_q.remove();
         sil2_q.remove();  
-        depthPrint(depth, "added element from both sil1 and sil2");        
      }
      
      if (max(height1, height2) != cur_height){
@@ -109,18 +103,18 @@ Queue<Point> SIL(int start, int end, int depth){
      if (sil1_q.element().y != cur_height){
         cur_height = sil1_q.element().y;
         ans_queue.add(new Point(sil1_q.element().x, cur_height));
+        sil1_q.remove();
      }
   }
   while (sil2_q.size() > 0){
      if (sil2_q.element().y != cur_height){
         cur_height = sil2_q.element().y;
         ans_queue.add(new Point(sil2_q.element().x, cur_height));
+        sil2_q.remove();
      }
   }  
-  System.out.println("in ans queue, ");
-  for (Point element : ans_queue) {
-  System.out.println("("+element.x + ", "+element.y+")");
-}
+ 
+
   return ans_queue;
 }
 
