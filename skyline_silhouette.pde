@@ -33,7 +33,6 @@ void setup() {
   strokeWeight(1);
   noFill();
   drawSkyline();
-  textSize(50);
 
 }
 
