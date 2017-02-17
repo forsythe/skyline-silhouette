@@ -33,6 +33,8 @@ void setup() {
   strokeWeight(1);
   noFill();
   drawSkyline();
+  textSize(50);
+
 }
 
 void depthPrint(int depth, String s){
@@ -83,18 +85,18 @@ Queue<Point> SIL(int start, int end, int depth){
   }
   
   while (sil1_q.size() > 0){
-     if (sil1_q.element().y != cur_height){
+     //if (sil1_q.element().y != cur_height){
         cur_height = sil1_q.element().y;
         ans_queue.add(new Point(sil1_q.element().x, cur_height));
         sil1_q.remove();
-     }
+     //}
   }
   while (sil2_q.size() > 0){
-     if (sil2_q.element().y != cur_height){
+     //if (sil2_q.element().y != cur_height){
         cur_height = sil2_q.element().y;
         ans_queue.add(new Point(sil2_q.element().x, cur_height));
         sil2_q.remove();
-     }
+     //}
   }  
  
 
@@ -117,7 +119,7 @@ void drawSkyline(){
   fill(0);
   rect(0, 0, width, height);
   noFill();
-  int num_buildings = randInt(5, 100);
+  int num_buildings = randInt(5, 20);
   Arr = new Building[num_buildings];
   for (int k = 0; k < num_buildings; k++) {
     int w = randInt(1, 5)*100;
@@ -125,14 +127,19 @@ void drawSkyline(){
     Arr[k] = new Building(leftX, leftX+w, randInt(1, 30)*15);
     //drawCritPoint(leftX, Arr[k].h);
     //drawCritPoint(leftX+w, 0);
-    stroke(randInt(100, 255), randInt(100, 255), randInt(100, 255));
+    //stroke(randInt(100, 255), randInt(100, 255), randInt(100, 255));
+    stroke(200, 200, 200);
     rect(leftX, height-Arr[k].h, w, Arr[k].h);
   }
   
   Queue<Point> temp = SIL(0, num_buildings-1, 0);
   depthPrint(0, "solution has size: " + temp.size() + ", with " +num_buildings + " buildings");
+  int full = temp.size();
   while (temp.size() > 0){
     drawCritPoint(temp.element().x, temp.element().y);
+    fill(255);
+    text(full-temp.size()+1, temp.element().x, height-temp.element().y);
+    noFill();
     temp.remove();
   }
   
