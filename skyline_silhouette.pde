@@ -23,8 +23,7 @@ int randInt(int min, int max) {
   return (int)(Math.random() * (max - min) + min);
 }
 
-final int NUM_BUILDINGS = 10;
-Building[] Arr = new Building[NUM_BUILDINGS];
+Building[] Arr;
 
 void setup() {
   size(1500, 500);
@@ -33,23 +32,7 @@ void setup() {
 
   strokeWeight(1);
   noFill();
-  for (int k = 0; k < NUM_BUILDINGS; k++) {
-    int w = randInt(1, 5)*100;
-    int leftX = randInt(1, 100)*10;     
-    Arr[k] = new Building(leftX, leftX+w, randInt(1, 30)*15);
-    //drawCritPoint(leftX, Arr[k].h);
-    //drawCritPoint(leftX+w, 0);
-    stroke(randInt(100, 255), randInt(100, 255), randInt(100, 255));
-    rect(leftX, height-Arr[k].h, w, Arr[k].h);
-  }
-  
-  Queue<Point> temp = SIL(0, NUM_BUILDINGS-1, 0);
-  depthPrint(0, "solution has size: " + temp.size());
-  while (temp.size() > 0){
-    drawCritPoint(temp.element().x, temp.element().y);
-    temp.remove();
-  }
-
+  drawSkyline();
 }
 
 void depthPrint(int depth, String s){
@@ -124,4 +107,33 @@ void drawCritPoint(int x, int y) {
 }
 
 void draw() {
+}
+
+void mouseReleased(){
+  drawSkyline();
+}
+
+void drawSkyline(){
+  fill(0);
+  rect(0, 0, width, height);
+  noFill();
+  int num_buildings = randInt(5, 100);
+  Arr = new Building[num_buildings];
+  for (int k = 0; k < num_buildings; k++) {
+    int w = randInt(1, 5)*100;
+    int leftX = randInt(1, 100)*10;     
+    Arr[k] = new Building(leftX, leftX+w, randInt(1, 30)*15);
+    //drawCritPoint(leftX, Arr[k].h);
+    //drawCritPoint(leftX+w, 0);
+    stroke(randInt(100, 255), randInt(100, 255), randInt(100, 255));
+    rect(leftX, height-Arr[k].h, w, Arr[k].h);
+  }
+  
+  Queue<Point> temp = SIL(0, num_buildings-1, 0);
+  depthPrint(0, "solution has size: " + temp.size() + ", with " +num_buildings + " buildings");
+  while (temp.size() > 0){
+    drawCritPoint(temp.element().x, temp.element().y);
+    temp.remove();
+  }
+  
 }
