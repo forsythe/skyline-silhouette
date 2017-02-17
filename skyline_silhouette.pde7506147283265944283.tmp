@@ -1,0 +1,27 @@
+class Building{
+  int left_x, right_x, h; 
+  Building(int a, int b, int c){
+    left_x = a;
+    right_x = b;
+    h = c; 
+  }
+};
+
+int randInt(int min, int max) {
+    return (int)(Math.random() * (max - min) + min);
+}
+
+final int NUM_BUILDINGS = 10;
+Building[] Arr = new Building[NUM_BUILDINGS];
+
+void setup(){
+  size(1200, 500);
+  for (int k = 0; k < NUM_BUILDINGS; k++){
+     int width = randInt(50, width/3);
+     Arr[k] = new Building(randInt(10, width-width/3-10);
+  }
+}
+
+void draw(){
+  
+}
