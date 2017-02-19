@@ -17,6 +17,9 @@ class Point {
     x = a;
     y = b;
   }
+  void print(){
+     System.out.println("("+x +", " + y + ")"); 
+  }
 };
 
 int randInt(int min, int max) {
@@ -54,8 +57,8 @@ Queue<Point> SIL(int start, int end, int depth){
      return ans_queue;
   }
   int m = (start+end)/2;
-  Queue<Point> sil1_q = SIL(start, m, ++depth);
-  Queue<Point> sil2_q = SIL(m+1, end, ++depth);
+  Queue<Point> sil1_q = SIL(start, m, depth+1);
+  Queue<Point> sil2_q = SIL(m+1, end, depth+1);
  
   int height1 = 0, height2 = 0, cur_height = 0;
   
@@ -114,28 +117,57 @@ void mouseReleased(){
   drawSkyline();
 }
 
+int[][] data = {{9,10,11},
+    {0,6,6},
+    {8,11,6},
+    {0,2,3},
+    {10,13,9},
+    {4,6,2},
+    {4,7,2}};
+
+Building[] buildFromInput(int[][] arr, int size){
+  Building ans[] = new Building[size];
+  for (int k = 0; k < size; k++){
+    ans[k] = new Building(10*arr[k][0], 10*arr[k][1], 10*arr[k][2]); //scaled by 10 to cuz we're plotting by pixel value
+  }
+  return ans;
+}
+
 void drawSkyline(){
   fill(0);
   rect(0, 0, width, height);
   noFill();
+  stroke(200, 200, 200);
+
+  
   int num_buildings = randInt(5, 20);
   Arr = new Building[num_buildings];
   for (int k = 0; k < num_buildings; k++) {
     int w = randInt(1, 5)*100;
     int leftX = randInt(1, 100)*10;     
     Arr[k] = new Building(leftX, leftX+w, randInt(1, 30)*15);
+    System.out.println("{"+Arr[k].left_x+", "+Arr[k].right_x+", " + Arr[k].h + "}" + ", ");
     //drawCritPoint(leftX, Arr[k].h);
     //drawCritPoint(leftX+w, 0);
     //stroke(randInt(100, 255), randInt(100, 255), randInt(100, 255));
-    stroke(200, 200, 200);
     rect(leftX, height-Arr[k].h, w, Arr[k].h);
   }
   
-  Queue<Point> temp = SIL(0, num_buildings-1, 0);
-  depthPrint(0, "solution has size: " + temp.size() + ", with " +num_buildings + " buildings");
+  
+  /*uncomment this part if you want to build custom buildings
+  Arr = buildFromInput(data, data.length);
+  for (int k = 0; k < Arr.length; k++){
+    rect(Arr[k].left_x, height-Arr[k].h, Arr[k].right_x-Arr[k].left_x, Arr[k].h);    
+  }
+  */
+  
+  Queue<Point> temp = SIL(0, Arr.length-1, 0);
+  depthPrint(0, "solution has size: " + temp.size() + ", with " +Arr.length + " buildings");
   int full = temp.size();
   while (temp.size() > 0){
     drawCritPoint(temp.element().x, temp.element().y);
+    temp.element().print();
+    
     fill(255);
     text(full-temp.size()+1, temp.element().x, height-temp.element().y);
     noFill();
